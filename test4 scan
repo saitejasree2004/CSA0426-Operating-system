@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h> 
+
+void scan(int arr[], int size, int head, int disk_size)
+ {
+    int seek = 0, i;
+    int left[size], right[size];
+    int l = 0, r = 0;
+
+    
+    for (i = 0; i < size; i++) 
+	{
+        if (arr[i] < head) {
+            left[l++] = arr[i];
+        } else {
+            right[r++] = arr[i];
+        }
+    }
+
+    for (i = 0; i < r; i++) {
+        seek += abs(right[i] - head);
+        head = right[i];
+    }
+
+    if (r > 0) {
+        seek += (disk_size - 1 - head); 
+        head = 0; 
+    }
+    
+
+    for (i = 0; i < l; i++) {
+        seek += abs(left[i] - head);
+        head = left[i];
+    }
+
+    printf("Seek count: %d\n", seek);
+}
+
+int main() {
+    int disk_size, i, head, num_requests;
+    int arr[100];
+
+    printf("Enter disk size: ");
+    scanf("%d", &disk_size);
+
+    printf("Enter number of requests: ");
+    scanf("%d", &num_requests);
+
+    if (num_requests > 100) {
+        printf("Number of requests exceeds array size.\n");
+        return 1;
+    }
+
+    printf("Enter requests:\n");
+    for (i = 0; i < num_requests; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    printf("Enter head position: ");
+    scanf("%d", &head);
+
+    scan(arr, num_requests, head, disk_size);
+    return 0;
+}
